@@ -1,0 +1,103 @@
+/* ——— Layout più “premium” senza cambiare markup ——— */
+
+/* pagina un filo più stretta e titolo allineato alla card */
+:root{ --pp-width: 720px; --pp-pad: 18px; }
+.page.page--narrow{ max-width: var(--pp-width); margin:24px auto 0; padding:0 16px; }
+.page.page--narrow .page__header{ max-width:var(--pp-width); margin:8px auto 12px; padding:0 var(--pp-pad); }
+
+/* titolo più elegante */
+.page__title{ letter-spacing:.2px; }
+
+/* card un pelo più morbide */
+.card{ border:1px solid var(--border); }
+
+/* se vuoi centrare facilmente alcune card senza inline style */
+.card--center{ max-width: var(--pp-width); margin:16px auto; }
+
+/* ——— “Message patient” a tutta larghezza con icona ——— */
+.btn--wide{ width:100%; max-width:420px; }
+.btn--icon{ gap:.45rem; }  /* per emoji/icone nel bottone */
+
+/* ——— Upload: input file più curato ——— */
+input[type="file"].input{
+  border-style:dashed; border-color:#d6dee8;
+  background: linear-gradient(#fff, #fff) padding-box,
+              repeating-linear-gradient(135deg,#f6f8fb,#f6f8fb 8px,#f1f5f9 8px,#f1f5f9 16px) border-box;
+}
+input[type="file"]::file-selector-button{
+  border:0; border-radius:9999px; padding:8px 12px; margin-right:10px;
+  background: var(--brand); color:#fff; cursor:pointer;
+}
+input[type="file"]::file-selector-button:hover{ background: var(--brand-600); }
+
+/* ——— Sezione dati paziente ——— */
+#patient{ text-align:center; line-height:1.45; }
+#patient strong{ display:inline-block; min-width:9ch; } /* allinea le etichette */
+
+/* ——— Lista report più leggibile (senza cambiare la struttura JS) ——— */
+#reports{ list-style: none; display:grid; gap:12px; }
+#reports > li{
+  border:1px solid var(--border); border-radius: var(--radius-sm);
+  background:#fff; padding:12px 14px;
+  box-shadow: 0 1px 2px rgba(2,8,23,.04);
+}
+#reports > li + li{ margin-top:0; }     /* evita doppio spacing */
+#reports b, #reports strong{ font-weight:700; }
+#reports small, #reports .muted{ color:var(--muted); }
+
+/* righe azioni pulsanti */
+#reports .actions{ display:flex; gap:8px; flex-wrap:wrap; }
+
+/* standardizza i tre pulsanti azione, eliminando il caos di colori inline */
+.btn--success{ background:#0f766e; color:#fff; } /* share */
+.btn--success:hover{ background:#0d9488; }
+.btn--info{ background:#2563eb; color:#fff; }    /* contact */
+.btn--info:hover{ background:#1d4ed8; }
+
+/* messaggi stato sotto all’upload */
+#uploadMsg{ color:var(--muted); }
+
+/* ——— Modal chat (se vuoi togliere gli inline style) ——— */
+.modal{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:9999; }
+.modal--open{ display:block; }
+.modal__dialog{
+  position:absolute; right:24px; bottom:24px; width:380px; max-height:75vh;
+  background:#fff; border-radius:12px; box-shadow:0 20px 60px rgba(0,0,0,.25);
+  display:flex; flex-direction:column;
+}
+.modal__header{
+  padding:12px 14px; border-bottom:1px solid #eee;
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+}
+.modal__body{ padding:12px; overflow:auto; flex:1; }
+.modal__footer{ display:flex; gap:8px; padding:12px; border-top:1px solid #eee; }
+.modal__input{ flex:1; }
+
+/* Allineamento etichette/valori nel riquadro paziente */
+#patient { 
+  display: grid; 
+  gap: 6px; 
+  line-height: 1.55;
+}
+
+/* Ogni riga diventa una griglia 2-colonne: etichetta fissa + valore fluido */
+#patient > div{
+  display: grid;
+  grid-template-columns: 12ch 1fr;  /* <— larghezza colonna etichetta */
+  column-gap: 10px;
+  align-items: baseline;
+}
+
+/* Etichette a destra della prima colonna */
+#patient > div > strong{
+  justify-self: end;      /* spinge "Email:" a filo col separatore */
+  font-weight: 700;       /* mantieni enfasi */
+  white-space: nowrap;    /* evita a capo su etichetta */
+}
+
+.icon-green {
+  color: #0f766e;
+  margin-right: 6px;
+}
+
+

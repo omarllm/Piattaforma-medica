@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Search Patients – Med_Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="bootstrap-auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <!-- Navbar coerente -->
+  <nav class="navbar" aria-label="Primary">
+    <div class="navbar__left">
+      <a class="navbar__brand" href="http://localhost:9001/dashboard-doctor.html">Dashboard</a>
+    </div>
+
+    <div class="navbar__center" role="navigation">
+    </div>
+
+    <div class="navbar__right">
+      <span class="navbar__user" id="navUser">Hi, Dr. Username</span>
+      <button class="btn" onclick="logout()">Log out</button>
+    </div>
+  </nav>
+
+  <!-- Layout coerente -->
+  <div class="page">
+    <main class="main">
+      <header class="page__header">
+        <h1 class="page__title">Search Patients</h1>
+        <h2 id="welcomeName" class="muted" style="margin:0;"></h2>
+      </header>
+
+      <!-- Search bar -->
+      <div class="card" style="max-width:500px; margin:16px auto;">
+        <form class="form" onsubmit="return false;">
+          <div class="form__row">
+            <label class="form__label" for="searchBar">Search</label>
+            <input
+              class="input"
+              type="text"
+              id="searchBar"
+              placeholder="Search patients…"
+              autocomplete="off"
+            />
+          </div>
+        </form>
+      </div>
+
+      <!-- Patient list -->
+      <div class="card" style="max-width:500px; margin:16px auto;">
+        <ul id="patientList" class="list">
+          <!-- Populated by searchpatients.js -->
+        </ul>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    const page = window.location.pathname.split('/').pop().split('.')[0];
+
+    if (!token || !role) {
+      alert("Please log in.");
+      window.location.href = "login.html";
+    } else if (page.startsWith('dashboard-doctor') || page.startsWith('searchpatients')) {
+      if (role !== 'doctor') {
+        alert("Unauthorized: Doctors only");
+        window.location.href = "login.html";
+      }
+    } else if (page.startsWith('patient')) {
+      if (role !== 'patient') {
+        alert("Unauthorized: Patients only");
+        window.location.href = "login.html";
+      }
+    }
+
+    function logout() {
+      localStorage.clear();
+      Swal.fire({
+        icon: 'info',
+        title: 'Logged out',
+        text: 'You have been logged out successfully!',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = 'http://localhost:9000/login.html';
+      });
+    }
+
+    async function loadUser() {
+      const res = await fetch("http://localhost:4000/me", {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const displayName = `${data.role === "doctor" ? "Dr. " : ""}${data.name}`;
+        document.getElementById("navUser").innerText     = `Hi, ${displayName}`;
+        document.getElementById("welcomeName").innerText = displayName;
+      } else {
+        document.getElementById("navUser").innerText = "Hi, Guest";
+      }
+    }
+
+    loadUser();
+  </script>
+
+  <!-- JS esterno -->
+  <script src="searchpatients.js"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  # ——— Authentication back-end ———
+  auth:
+    build:
+      context: ./source/auth-service
+    image: myapp/auth-service:latest
+    volumes:
+      - ./source/auth-service:/app
+      - /app/node_modules          # <-- volume anonimo per non sovrascrivere node_modules
+    command: npm start             # <-- usa node in container
+    ports:
+      - "4000:4000"
+    environment:
+      - PORT=${PORT}
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - TZ=Europe/Rome
+    restart: unless-stopped
+
+
+  # ——— Authentication front-end ———
+  auth-ui:
+    build:
+      context: ./source/auth-ui
+    image: myapp/auth-ui:latest
+    ports:
+      - "9000:80"
+    environment:
+      - TZ=Europe/Rome
+    restart: unless-stopped
+
+  # ——— Doctor back-end ———
+  doctor:
+    build:
+      context: ./source/doctor-service
+    image: myapp/doctor-service:latest
+    volumes:
+      - ./source/doctor-service:/app
+    command: npm start
+    ports:
+      - "4001:4001"
+    environment:
+      - PORT=4001
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - TZ=Europe/Rome
+    restart: unless-stopped
+
+  # ——— Doctor front-end ———
+  doctor-ui:
+    build: ./source/doctor-ui
+    volumes:
+      - ./source/doctor-ui/public:/usr/share/nginx/html
+    ports:
+      - "9001:80"
+    environment:
+      - TZ=Europe/Rome
+    restart: unless-stopped
+
+  # ——— Patient back-end ———
+  patient:
+    build:
+      context: ./source/patient-service
+    image: myapp/patient-service:latest
+    volumes:
+      - ./source/patient-service:/app
+    command: npm start
+    ports:
+      - "4002:4002"
+    # Se usi .env per il patient-service, lasciale; se hai hardcoded nel codice, rimuovi environment:
+    environment:
+      - PORT=4002
+      - MONGODB_URI=${MONGODB_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - TZ=Europe/Rome
+      - DOCTOR_PUBLIC_BASE=http://doctor:4001
+    restart: unless-stopped
+
+  # ——— Patient front-end ———
+  patient-ui:
+    build: ./source/patient-ui
+    volumes:
+      - ./source/patient-ui/public:/usr/share/nginx/html
+    ports:
+      - "9002:80"
+    environment:
+      - TZ=Europe/Rome
+    restart: unless-stopped

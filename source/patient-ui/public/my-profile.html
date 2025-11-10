@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-role="patient">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Profile – Med_Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="bootstrap-auth.js"></script>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar__left">
+      <a class="navbar__brand" href="http://localhost:9002/dashboard-patient.html">Dashboard</a>
+    </div>
+    <div class="navbar__center">
+      <a class="btn" href="my-messages.html">Messages</a>
+      <a class="btn btn--primary" href="my-reports.html">Reports</a>
+      <a class="btn" href="my-profile.html">My Profile</a>
+    </div>
+    <div class="navbar__right">
+      <span id="navUser" class="navbar__user">Hi</span>
+      <button class="btn" onclick="logout()">Log out</button>
+    </div>
+  </nav>
+
+  <main class="page">
+    <h1 class="page__title">My Profile</h1>
+
+    <section class="card" style="max-width:760px;">
+      <h2 class="card__title">Contact info</h2>
+      <div class="form__row">
+        <label class="form__label" for="name">Full name</label>
+        <input id="name" class="input" placeholder="Your name" />
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="email">Email (login)</label>
+        <input id="email" class="input" disabled />
+      </div>
+      <div class="form__row">
+        <label class="form__label" for="phone">Phone (for SMS)</label>
+        <input id="phone" class="input" placeholder="+39..." />
+      </div>
+      <div class="form__row" style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+        <div>
+          <label class="form__label" for="language">Language</label>
+          <select id="language" class="input">
+            <option value="en">English</option>
+            <option value="it">Italiano</option>
+          </select>
+        </div>
+        <div>
+          <label class="form__label" for="timezone">Time zone</label>
+          <input id="timezone" class="input" placeholder="e.g., Europe/Rome" />
+        </div>
+      </div>
+      <div class="form__actions">
+        <button id="saveContact" class="btn btn--primary">Save</button>
+        <span id="contactMsg" class="muted"></span>
+      </div>
+    </section>
+
+    <section class="card" style="max-width:760px;">
+      <h2 class="card__title">Notification preferences</h2>
+      <div class="form__row" style="display:flex; gap:16px; flex-wrap:wrap;">
+        <label><input type="checkbox" id="chanInapp" checked disabled /> In-app (always on)</label>
+        <label><input type="checkbox" id="chanEmail" /> Email</label>
+        <label><input type="checkbox" id="chanSms" /> SMS</label>
+      </div>
+
+<div class="form__row">
+  <label class="form__label">Delivery</label>
+  <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+    <label style="display:flex; align-items:center; gap:6px;">
+      <input type="radio" name="digest" value="immediate" checked />
+      Immediate
+    </label>
+    <label style="display:flex; align-items:center; gap:6px;">
+      <input type="radio" name="digest" value="daily" />
+      Daily at
+      <input id="dailyHour" type="number" min="0" max="23" value="9" class="input" style="width:5rem;" />
+    </label>
+    <label style="display:flex; align-items:center; gap:6px;">
+      <input type="radio" name="digest" value="weekly" />
+      Weekly (Mon) at
+      <input id="weeklyHour" type="number" min="0" max="23" value="9" class="input" style="width:5rem;" />
+    </label>
+  </div>
+</div>
+
+
+      <div class="form__row">
+        <label class="form__label">Quiet hours (do not disturb)</label>
+        <label style="display:flex; gap:10px; align-items:center;">
+          <input type="checkbox" id="qhEnabled" /> Enable
+          <span>from</span>
+          <input id="qhStart" type="time" class="input" value="22:00" style="width:8.5rem;" />
+          <span>to</span>
+          <input id="qhEnd" type="time" class="input" value="07:00" style="width:8.5rem;" />
+          <span>tz</span>
+          <input id="qhTz" class="input" style="width:14rem;" placeholder="local / Europe/Rome" />
+        </label>
+      </div>
+
+      <div class="form__actions">
+        <button id="savePrefs" class="btn btn--primary">Save preferences</button>
+        <span id="prefsMsg" class="muted"></span>
+      </div>
+    </section>
+  </main>
+
+  <script src="my-profile.js"></script>
+</body>
+</html>

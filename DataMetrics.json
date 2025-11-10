@@ -1,0 +1,60 @@
+[
+    {
+        "set_id": 1,
+        "set_name": "auth patient",
+        "user_stories": [1, 2, 3, 4],
+        "links": [4],
+        "db": "true"
+    },
+    {
+        "set_id": 2,
+        "set_name": "auth doctor",
+        "user_stories": [5, 6, 7, 8],
+        "links": [3],
+        "db": "true"
+    },
+    {
+        "set_id": 3,
+        "set_name": "doctor",
+        "user_stories": [9, 10, 11, 12],
+        "links": [5, 7],
+        "db": "true"
+    },
+    {
+        "set_id": 4,
+        "set_name": "patient",
+        "user_stories": [21, 31, 33, 34],
+        "links": [6, 8],
+        "db": "true"
+    },
+    {
+        "set_id": 5,
+        "set_name": "report doctor",
+        "user_stories": [13, 14, 15, 16, 18, 25],
+        "links": [3, 6],
+        "db": "true"
+    },
+    {
+        "set_id": 6,
+        "set_name": "report patient",
+        "user_stories": [17, 19],
+        "links": [4, 5],
+        "db": "true"
+    },
+    {
+        "set_id": 7,
+        "set_name": "notification doctor",
+        "user_stories": [27,28,32],
+        "links": [3, 8],
+        "db": "true"
+    },
+    {
+        "set_id": 8,
+        "set_name": "notification patient",
+        "user_stories": [26, 29, 30],
+        "links": [4, 7],
+        "db": "true"
+    }
+]
+
+

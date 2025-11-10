@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register – Med_Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navbar uniforme -->
+  <nav class="navbar" aria-label="Primary">
+    <div class="navbar__left">
+      <a class="navbar__brand" href="homepage.html">MED_PLATFORM</a>
+    </div>
+
+    <div class="navbar__center" role="navigation">
+    </div>
+
+    <div class="navbar__right">
+      <a class="btn" href="login.html">Sign in</a>
+    </div>
+  </nav>
+
+  <!-- Layout coerente -->
+  <div class="page">
+    <main class="main">
+      <header class="page__header">
+        <h1 class="page__title">Create Your Account</h1>
+      </header>
+      <div class="card" style="max-width:500px; margin:auto;">
+        <form id="registerForm" class="form">
+          <!-- Nome completo -->
+          <div class="form__row">
+            <label class="form__label" for="name">Full Name</label>
+            <input class="input" id="name" name="name" type="text" placeholder="Your full name" required />
+          </div>
+
+          <!-- Email -->
+          <div class="form__row">
+            <label class="form__label" for="email">Email</label>
+            <input class="input" id="email" name="email" type="email" placeholder="you@example.com" required />
+          </div>
+
+          <!-- Password -->
+          <div class="form__row">
+            <label class="form__label" for="password">Password</label>
+            <input class="input" id="password" name="password" type="password" placeholder="Password" required />
+          </div>
+
+          <!-- Conferma password -->
+          <div class="form__row">
+            <label class="form__label" for="confirm">Confirm Password</label>
+            <input class="input" id="confirm" name="confirm" type="password" placeholder="Repeat password" required />
+          </div>
+
+          <!-- Età -->
+          <div class="form__row">
+            <label class="form__label" for="age">Age</label>
+            <input class="input" id="age" name="age" type="number" min="0" placeholder="Your age" required />
+          </div>
+
+          <!-- Ruolo (esempio: Doctor o Patient) -->
+          <div class="form__row">
+            <label class="form__label" for="role">Role</label>
+            <select class="input" id="role" name="role" required>
+              <option value="">-- Select role --</option>
+              <option value="doctor">Doctor</option>
+              <option value="patient">Patient</option>
+            </select>
+          </div>
+
+          <!-- Azioni -->
+          <div class="form__actions">
+            <button type="submit" class="btn btn--primary">Register</button>
+            <a href="login.html" class="btn btn--outline">Already have an account?</a>
+          </div>
+        </form>
+
+        <div id="spinner" class="muted" style="display:none; margin-top:1rem;">Creating account...</div>
+        <div id="response" class="success" style="margin-top:1rem;"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="register.js"></script>
+</body>
+</html>

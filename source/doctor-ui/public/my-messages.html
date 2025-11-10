@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" data-role="doctor">
+<head>
+  <meta charset="utf-8" />
+  <title>My Messages – Doctor</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="bootstrap-auth.js"></script>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E💬%3C/text%3E%3C/svg%3E" />
+  <style>
+    .chat{ max-width:1100px; margin:16px auto; display:grid; grid-template-columns:280px 1fr; gap:16px; }
+    .card--flush{ padding:0; }
+    .threads .list{ max-height:70vh; overflow:auto; }
+    .thread-item{ display:block; padding:12px 14px; border-bottom:1px solid var(--border); cursor:pointer; text-align:left; }
+    .thread-item:hover{ background:#f7fafb; }
+    .thread-item.active{ background:#eef6ff; }
+    .thread-title{ font-weight:700; }
+    .thread-sub{ font-size:.95rem; color:var(--muted); }
+    .thread-item.unread{ background:#fff8e1; }
+    .messages{ padding:14px; height:420px; overflow:auto; display:flex; flex-direction:column; gap:12px; }
+    .msg{ max-width:80%; }
+    .msg .bubble{ padding:10px; }
+    .msg-meta{ font-size:.8rem; color:var(--muted); margin-top:4px; }
+    .msg.me{ align-self:flex-end; }
+    .msg.me .bubble{ background:#e8f5e9; border-radius:12px 12px 0 12px; }
+    .msg.pat{ align-self:flex-start; }
+    .msg.pat .bubble{ background:#e3f2fd; border-radius:12px 12px 12px 0; }
+    .composer{ display:flex; gap:8px; padding:12px; border-top:1px solid var(--border); }
+    .composer .input{ min-height:46px; resize:vertical; }
+  </style>
+</head>
+<body>
+  <nav class="navbar" aria-label="Primary">
+    <div class="navbar__left">
+      <a class="navbar__brand" href="http://localhost:9001/dashboard-doctor.html">Dashboard</a>
+    </div>
+    <div class="navbar__center">
+    </div>
+    <div class="navbar__right">
+      <span class="navbar__user" id="navUser">Hi, Dr.</span>
+      <button class="btn" onclick="logout()">Log out</button>
+    </div>
+  </nav>
+
+  <div class="page">
+    <main class="main">
+      <header class="page__header">
+        <h1 class="page__title">My Messages</h1>
+      </header>
+
+      <div class="chat">
+        <aside class="threads card card--flush">
+          <div class="chat-header muted">Conversations</div>
+          <div id="threadList" class="list"></div>
+        </aside>
+
+        <section class="chat-panel card card--flush">
+          <div id="threadHeader" class="chat-header muted" aria-live="polite">Select a conversation.</div>
+          <div id="messages" class="messages" aria-live="polite" aria-relevant="additions"></div>
+          <div class="composer">
+            <textarea id="composerText" class="input" placeholder="Write a message…" disabled></textarea>
+            <button id="sendBtn" class="btn btn--primary" disabled>Send</button>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function logout(){ localStorage.clear(); sessionStorage.clear(); location.href='http://localhost:9000/login.html'; }
+    document.addEventListener('DOMContentLoaded', async () => {
+      try{
+        const r = await fetch('http://localhost:4000/me',{headers:{Authorization:`Bearer ${localStorage.getItem('token')}`}})
+        if(r.ok){ const me=await r.json(); const n=document.getElementById('navUser'); if(n){ const base=me.name??(me.email?me.email.split('@')[0]:''); n.textContent=`Hi, Dr. ${base}`; } }
+      }catch{}
+    });
+  </script>
+
+  <script src="my-messages.js"></script>
+</body>
+</html>

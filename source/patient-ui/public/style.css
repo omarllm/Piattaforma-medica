@@ -1,0 +1,367 @@
+/* === Core UI (uniform across apps) ================================
+   Import this first in every UI. Keep selectors and class names identical
+   to ensure consistency site‑wide. Only variables (below) may be overridden
+   by each app's theme file.
+====================================================================== */
+
+/* Design tokens (defaults) */
+:root{
+  --bg:            #f7fafb;
+  --surface:       #ffffff;
+  --text:          #0f172a;   /* slate-900 */
+  --muted:         #64748b;   /* slate-500 */
+  --brand:         #0f766e;   /* teal-700 */
+  --brand-600:     #0d9488;   /* teal-600 */
+  --accent:        #2563eb;   /* blue-600 */
+  --danger:        #b91c1c;   /* red-700 */
+  --danger-600:    #dc2626;
+  --ring:          #93c5fd;   /* focus outline */
+  --radius:        12px;
+  --radius-sm:     10px;
+  --shadow:        0 6px 20px rgba(2, 8, 23, .08);
+  --border:        #e5eaf1;
+}
+
+/* Reset-ish */
+*{ box-sizing: border-box; }
+html,body{ height:100%; }
+body{
+  margin:0;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+a{ color: inherit; text-decoration: none; }
+img{ max-width:100%; height:auto; display:block; }
+
+/* ===== Navbar (shared) ============================================== */
+.navbar{
+  position: sticky; top:0; z-index:10;
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  padding: 12px 20px;
+  background: var(--brand);
+  color:#fff;
+  box-shadow: 0 2px 10px rgba(0,0,0,.06);
+  font-weight:600;
+}
+.navbar__left, .navbar__center, .navbar__right{ display:flex; align-items:center; gap:10px; }
+.navbar__brand{ font-weight:700; letter-spacing:.3px; }
+.navbar__user{ opacity:.92; }
+.navbar a.btn, .navbar button{
+  background: rgba(255,255,255,.12);
+  color:#fff;
+  border:0;
+  padding:8px 16px;
+  border-radius: 9999px;
+  cursor:pointer;
+}
+.navbar a.btn:hover, .navbar button:hover{ background: rgba(255,255,255,.18); }
+
+/* ===== Layout ======================================================= */
+.page{ max-width: 960px; margin: 24px auto; padding: 0 16px; }
+.page__header{ margin: 8px 0 16px; }
+.page__title{ margin:0; font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2rem); }
+.main{ text-align:center; padding: 3.5rem 1rem; }
+
+/* ===== Card / Grid ================================================== */
+.card{
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 18px;
+  margin: 16px 0;
+  box-shadow: var(--shadow);
+}
+.card__title{ margin: 0 0 12px; font-size: 1.15rem; }
+
+.grid{ display:grid; gap:12px; }
+.grid--2{ grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); }
+.grid > div{
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background:#fff;
+}
+
+/* ===== Forms ======================================================== */
+.form{ display:grid; gap: 12px; }
+.form__row{ display:grid; gap:6px; }
+.form__label{ font-weight:600; }
+.form__actions{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+
+.input, select, textarea{
+  appearance:none;
+  width:100%;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid #d6dee8;
+  background:#fff;
+  color: var(--text);
+}
+.input:focus, select:focus, textarea:focus{
+  outline: 3px solid var(--ring);
+  outline-offset: 1px;
+}
+.input--file{ padding:10px; border-style:dashed; }
+
+
+/* ===== Buttons ====================================================== */
+.btn{
+  appearance:none;
+  border:0;
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  font-weight:600;
+  cursor:pointer;
+  transition: transform .02s ease, background .15s ease, box-shadow .15s ease;
+  box-shadow: 0 1px 2px rgba(2,8,23,.04);
+  display:inline-flex; align-items:center; justify-content:center;
+  line-height:1;
+}
+.btn:active{ transform: translateY(1px); }
+.btn--primary{ background: var(--brand); color:#fff; }
+.btn--primary:hover{ background: var(--brand-600); }
+.btn--secondary{ background:#eef2ff; color:#1e3a8a; }
+.btn--secondary:hover{ background:#e0e7ff; }
+.btn--danger{ background: var(--danger); color:#fff; }
+.btn--danger:hover{ background: var(--danger-600); }
+.btn--outline{ background:transparent; color:var(--text); border:1px solid #d6dee8; }
+.btn--outline:hover{ background:#f3f4f6; }
+.btn--ghost{ background: rgba(2,8,23,.06); }
+.btn--ghost:hover{ background: rgba(2,8,23,.1); }
+
+/* ===== Lists / Reports ============================================= */
+.list{ list-style:none; margin:0; padding:0; }
+.empty{ color: var(--muted); padding:8px; }
+.report{
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin: 10px 0;
+  background:#fff;
+}
+.report__head{
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+}
+.report__title .file{ font-weight:700; }
+.report__title .when{ color: var(--muted); margin-left: 6px; }
+.report__actions{ display:flex; gap:8px; flex-wrap:wrap; }
+.report__meta{ margin-top:8px; color:var(--text); display:flex; gap:6px; flex-wrap:wrap; }
+.report__meta .label{ font-weight:600; color:#0b1324; }
+.report__meta .value{ color:#1f2937; }
+
+/* ===== States / helpers ============================================ */
+.muted{ color: var(--muted); }
+.success{ color:#166534; }
+.error{ color: var(--danger); }
+
+/* Accessibility */
+:where(a, button, input, .btn):focus-visible{
+  outline: 3px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* Motion */
+@media (prefers-reduced-motion: reduce){
+  .btn{ transition: none; }
+}
+
+
+/* ===== Patient Timeline (no scroll, full width) ==================== */
+.section{ max-width:1100px; margin:20px auto 40px; padding:0 16px; }
+.section__title{ margin:0 0 12px; font-weight:700; text-align:center; }
+
+/* Layout orizzontale */
+.tl-horizontal{
+  position:relative;
+  width:100%;
+  padding:90px 0;                  /* spazio per i tooltip sopra/sotto */
+}
+.tl-line{
+  position:absolute; left:0; right:0; top:50%;
+  height:3px; background:#cfd8e3; transform:translateY(-50%);
+  border-radius:3px;
+}
+.tl-events{
+  position:relative;
+  display:flex; justify-content:space-between; align-items:center;
+  gap:12px;                         /* un filo di aria tra pin */
+}
+
+/* Stato vuoto */
+.tl-empty{ color:#64748b; text-align:center; width:100%; }
+
+/* Pin + dot */
+.tl-pin{
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;                /* centra il dot sul pin */
+  justify-content: center;
+  align-items: center;
+}
+
+.tl-dot{
+  display: block;               /* <-- fondamentale: il dot ora rispetta width/height */
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #1976d2;
+  box-shadow: 0 0 0 3px rgba(25,118,210,.12);
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+/* Stati */
+.tl-dot.alert{ background:#f59e0b; box-shadow:0 0 0 3px rgba(245,158,11,.14); }
+.tl-dot.critical{ background:#dc2626; box-shadow:0 0 0 3px rgba(220,38,38,.14); }
+.tl-dot.completed{ background:#16a34a; box-shadow:0 0 0 3px rgba(22,163,74,.14); }
+/* (quando aggiungerai eventi futuri) */
+.tl-dot.upcoming{ background:#22c55e; box-shadow:0 0 0 3px rgba(34,197,94,.16); }
+
+.tl-dot::before{
+  content:"";
+  position:absolute;
+  left:50%; top:50%;
+  width:28px; height:28px;
+  transform:translate(-50%,-50%);
+  border-radius:50%;
+}
+
+
+/* Tooltip (card) — nascosto di default, appare su hover */
+.tl-card{
+  position:absolute;
+  left:50%;
+  background:#fff; border:1px solid #e5e7eb; border-radius:10px;
+  padding:8px 10px; min-width:180px; max-width:240px; text-align:center;
+  box-shadow:0 6px 20px rgba(2,8,23,.08);
+  opacity:0; transform:translate(-50%,-6px) scale(.96);
+  pointer-events:none; transition:opacity .18s ease, transform .18s ease;
+  z-index:10;
+}
+.tl-card.top{ bottom:20px; }
+.tl-card.bot{ top:20px;   }
+.tl-pin:hover .tl-card{
+  opacity:1; transform:translate(-50%,0) scale(1); pointer-events:auto;
+}
+/* mostra sempre la card se il pin ha la classe .show */
+.tl-pin.show .tl-card{
+  opacity: 1;
+  transform: translate(-50%,0) scale(1);
+  pointer-events: auto;
+  z-index: 11;
+}
+
+
+/* Freccetta del tooltip */
+.tl-card::after{
+  content:""; position:absolute; left:50%; transform:translateX(-50%);
+  border:8px solid transparent;
+}
+.tl-card.top::after{ top:100%; border-top-color:#e5e7eb; }
+.tl-card.bot::after{ bottom:100%; border-bottom-color:#e5e7eb; }
+
+/* Contenuti tooltip */
+.tl-title{ font-weight:700; margin-bottom:4px; display:flex; justify-content:center; gap:6px; }
+.tl-sub{   font-size:.9em; color:#555; }
+.tl-meta{  font-size:.8em; color:#888; margin-top:4px; }
+
+/* Accessibilità: area di hover più facile */
+.tl-dot::before{
+  content:""; position:absolute; left:50%; top:50%;
+  width:28px; height:28px; transform:translate(-50%,-50%); border-radius:50%;
+}
+
+/* Mobile: fallback verticale */
+@media (max-width: 640px){
+  .tl-horizontal{ padding:0; }
+  .tl-line{ display:none; }
+  .tl-events{ display:block; }
+  .tl-pin{ margin:12px 0; }
+  .tl-dot{ display:none; }
+  .tl-card{ position:static; transform:none; opacity:1; pointer-events:auto; width:100%; max-width:none; }
+  .tl-card::after{ display:none; }
+}
+/* ===== Reminders (shared) =========================================== */
+.reminder-indicator{
+  display:inline-flex; align-items:center; gap:6px;
+  cursor:pointer; user-select:none;
+}
+.reminder-indicator .bell{ font-size:1.1rem; line-height:1; }
+
+.reminder-popover{
+  position:absolute; right:20px; top:54px;
+  width:min(360px, 92vw);
+  background:#0f766e;
+  color: var(--text);
+  border:1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding:10px;
+  z-index: 20;
+}
+.reminder-popover .empty{
+  padding:10px; color:var(--muted); text-align:center; background:#fff;
+}
+.reminder-popover .item{
+  display:block; width:100%;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: #f3f4f6;
+  color:#000;
+  text-align:left;
+  cursor:pointer;
+}
+.reminder-popover .item:hover{ background:#fff; }
+.reminder-popover .title{ margin:0 0 6px; font-weight:700; }
+.reminder-popover .meta { font-size:.86rem; color:var(--muted); }
+
+.pill { display:inline-block; padding:2px 6px; border-radius:10px; font-size:12px; line-height:1; border:1px solid rgba(255,255,255,.2); }
+.pill--low { background:rgba(0,128,0,.15); border-color:rgba(0,128,0,.35); }
+.pill--medium { background:rgba(255,165,0,.15); border-color:rgba(255,165,0,.35); }
+.pill--high { background:rgba(255,0,0,.15); border-color:rgba(255,0,0,.35); }
+
+/* ==================================================================== */
+
+/* === My Profile: spacing & rhythm ================================== */
+.card{
+  padding: 24px;          /* più aria dentro la card */
+  margin: 24px 0;         /* più spazio tra le card */
+}
+.card__title{ margin-bottom: 16px; }
+
+/* più spazio verticale tra le righe del form */
+.card .form__row{ gap: 8px; }
+.card .form__row + .form__row{ margin-top: 14px; }
+
+/* sezione bottoni ben staccata dal contenuto sopra */
+.card .form__actions{
+  margin-top: 18px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* piccoli miglioramenti di allineamento negli input inline */
+.card input[type="number"],
+.card input[type="time"]{
+  vertical-align: middle;
+}
+
+/* nei gruppi di checkbox/radio, più spazio fra elementi */
+.card .form__row > label{
+  margin-right: 12px;
+}
+
+/* Titoli delle pagine: distanza uniforme dal contenuto sotto */
+.page__header {
+  margin: 0 0 12px;     /* nessun margine sopra, 12px sotto */
+}
+
+.page__title {
+  margin: 0;
+  font-size: clamp(1.6rem, 1.3rem + 1.2vw, 2rem);
+  font-weight: 700;
+}

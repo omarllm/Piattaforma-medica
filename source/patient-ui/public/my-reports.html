@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" data-role="patient">
+<head>
+  <meta charset="utf-8" />
+  <title>My Reports – Med_Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="bootstrap-auth.js"></script>
+  <style>
+    .badge{display:inline-block;background:var(--danger);color:#fff;border-radius:9999px;padding:0 6px;font-size:.8rem;line-height:1.6;vertical-align:middle;margin-left:6px;}
+    .reports{max-width:720px;margin:16px auto;}
+    #reportList{list-style:none;margin:0;padding:0;}
+    #reportList>li{border:1px solid var(--border);border-radius:var(--radius-sm);background:#fff;padding:12px 14px;box-shadow:0 1px 2px rgba(2,8,23,.04);}
+    #reportList>li+li{margin-top:10px;}
+    .report-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+  </style>
+</head>
+<body>
+  <nav class="navbar" aria-label="Primary">
+    <div class="navbar__left">
+      <a class="navbar__brand" href="http://localhost:9002/dashboard-patient.html">Dashboard</a>
+    </div>
+    <div class="navbar__center" role="navigation">
+      <a class="btn" href="my-messages.html">Messages</a>
+      <a class="btn btn--primary" href="my-reports.html">Reports</a>
+      <a class="btn" href="my-profile.html">My Profile</a>
+    </div>
+    <div class="navbar__right">
+      <span class="navbar__user" id="navUser">Hi, Username
+        <span id="unreadBadge" class="badge" style="display:none;"></span>
+      </span>
+      <button class="btn" onclick="logout()">Log out</button>
+    </div>
+  </nav>
+
+  <div class="page">
+    <main class="main">
+      <header class="page__header">
+        <h1 class="page__title">My Reports</h1>
+      </header>
+
+      <div class="reports">
+        <ul id="reportList"></ul>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    function logout(){ localStorage.clear(); sessionStorage.clear(); location.href='http://localhost:9000/login.html'; }
+    (async () => {
+      try {
+        const t = localStorage.getItem('token'); if(!t) return;
+        const r = await fetch('http://localhost:4000/me',{headers:{Authorization:`Bearer ${t}`}}); if(!r.ok) return;
+        const me = await r.json();
+        const name = me.name || me.username || (me.email ? me.email.split('@')[0] : '');
+        const nav = document.getElementById('navUser'); if(nav) nav.textContent = `Hi, ${name}`;
+      } catch {}
+    })();
+  </script>
+
+  <!-- lista -->
+  <script src="my-reports.js"></script>
+
+  <!-- Aggancio “Download PDF” per ogni report senza modificare my-reports.js -->
+  <script>
+  (function() {
+    const API = (window.API_PATIENT) || 'http://localhost:4002';
+    const list = document.getElementById('reportList');
+
+    // crea il bottone se manca
+    function ensurePdfButton(li) {
+      if (!li || !li.dataset.reportId) return;
+      const actions = li.querySelector('.report-actions') || li;
+      if (actions.querySelector('[data-pdf]')) return;
+      const a = document.createElement('a');
+      a.className = 'btn btn--light';
+      a.textContent = 'Download PDF';
+      a.href = `${API}/my/reports/${encodeURIComponent(li.dataset.reportId)}/pdf`;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.setAttribute('data-pdf','');
+      actions.appendChild(a);
+    }
+
+    // iniziale (se la lista è già renderizzata)
+    Array.from(list.children).forEach(ensurePdfButton);
+
+    // osserva nuovi elementi aggiunti dalla render function
+    const mo = new MutationObserver(muts => {
+      for (const m of muts) {
+        m.addedNodes.forEach(node => {
+          if (node.nodeType === 1 && node.matches('li[data-report-id]')) ensurePdfButton(node);
+          // nel caso vengano rimpiazzati blocchi interi
+          node.querySelectorAll?.('li[data-report-id]').forEach(ensurePdfButton);
+        });
+      }
+    });
+    mo.observe(list, { childList: true, subtree: true });
+  })();
+  </script>
+</body>
+</html>

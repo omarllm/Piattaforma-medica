@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Patient Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="bootstrap-auth.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <!-- Navbar coerente -->
+  <nav class="navbar" aria-label="Primary">
+    <div class="navbar__left">
+      <a class="navbar__brand" href="http://localhost:9002/dashboard-patient.html">Dashboard</a>
+    </div>
+
+    <div class="navbar__center" role="navigation">
+      <a class="btn" href="my-messages.html">Messages</a>
+      <a class="btn btn--primary" href="my-reports.html">Reports</a>
+      <a class="btn" href="my-profile.html">My Profile</a>
+    </div>
+
+    <div class="navbar__right">
+      <span class="navbar__user" id="navUser">Hi, Username</span>
+      <button class="btn" onclick="logout()">Log out</button>
+      <div class="reminder-indicator" id="reminderBell" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
+        <span class="bell"><i class="fa-solid fa-bell"></i></span>
+        <span id="reminderBadge" class="badge" style="display:none;">0</span>
+      </div>
+
+      <!-- Popover (nascosto di default) -->
+      <div id="reminderPopover" class="reminder-popover" hidden></div>
+    </div>
+  </nav>
+
+  <!-- Layout coerente -->
+  <div class="page">
+    <main class="main">
+      <header class="page__header">
+        <h1 class="page__title">WELCOME TO MED_PLATFORM</h1>
+        <h2 id="welcomeName">Username</h2>
+      </header> 
+
+      <div class="card" style="max-width:640px; margin:auto;">
+        <div class="form__actions" style="justify-content:center;">
+          <a id="viewMyDoctorsBtn" class="btn btn--primary" href="http://localhost:9002/my-messages.html">
+            Check your messages
+          </a>
+          <a id="searchDoctorsBtn" class="btn btn--secondary" href="http://localhost:9002/my-reports.html">
+            Check your reports
+          </a>
+        </div>
+      </div>
+
+      <!-- Timeline (patient) -->
+      <section class="section" id="timelineSection" aria-labelledby="timelineTitle">
+        <h3 class="section__title" id="timelineTitle">Your Timeline</h3>
+
+        <!-- Struttura base della timeline orizzontale -->
+        <div class="tl-horizontal">
+          <!-- Linea centrale -->
+          <div class="tl-line" aria-hidden="true"></div>
+
+          <!-- Contenitore eventi (verrà popolato in seguito via JS) -->
+          <div class="tl-events" id="timelineRail">
+            <!-- Placeholder di stato vuoto (verrà rimpiazzato dallo script) -->
+            <div class="tl-empty" role="status" aria-live="polite">
+              No notifications yet.
+            </div>
+
+            <!-- Esempio di pin statico (facoltativo; utile solo per design preview)
+            <div class="tl-pin">
+              <span class="tl-dot" aria-hidden="true"></span>
+              <div class="tl-card top" role="tooltip">
+                <div class="tl-title">📩 Event title</div>
+                <div class="tl-sub">12/08/2025, 09:30 • Dr. John</div>
+                <div class="tl-meta">Sent</div>
+              </div>
+            </div>
+            -->
+          </div>
+        </div>
+      </section>
+
+
+  <script src="dashboard-patient.js"></script>
+  <script>
+(async () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+
+    const res = await fetch('http://localhost:4000/me', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    if (!res.ok) return;
+
+    const me = await res.json();
+    // priorità: name → username → parte prima della @
+    const name = me.name || me.username || (me.email ? me.email.split('@')[0] : '');
+
+    const nav = document.getElementById('navUser');
+    if (nav) nav.textContent = `Hi, ${name}`;
+
+    const w = document.getElementById('welcomeName');
+    if (w) w.textContent = name;
+  } catch (e) {
+    console.error('set name error', e);
+  }
+})();
+</script>
+<script>
+(async function loadPatientTimeline(){
+  const rail = document.getElementById('timelineRail');
+  if (!rail) return;
+
+  // stato iniziale
+  rail.innerHTML = `<div class="tl-empty" role="status" aria-live="polite">Loading…</div>`;
+
+  try {
+    const res = await fetch('http://localhost:4002/my/timeline?limit=12', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')||''}` }
+    });
+    if (!res.ok) {
+      rail.innerHTML = `<div class="tl-empty">Error loading timeline</div>`;
+      return;
+    }
+
+    const { timeline = [] } = await res.json();
+    if (!timeline.length) {
+      rail.innerHTML = `<div class="tl-empty">No notifications yet.</div>`;
+      return;
+    }
+
+    // ordina: vecchio → nuovo
+    timeline.sort((a, b) => {
+      const ta = new Date(a.when || a.createdAt || Date.now()).getTime();
+      const tb = new Date(b.when || b.createdAt || Date.now()).getTime();
+      return ta - tb;
+    });
+
+    rail.innerHTML = '';
+    let flip = 0;
+
+    // trova il primo evento non completato (priorità futuro)
+    const nowTs = Date.now();
+    const firstFutureIdx = timeline.findIndex(ev => {
+      const t = new Date(ev.when || ev.createdAt || Date.now()).getTime();
+      const isReminder = String(ev.type || '').startsWith('reminder');
+      const isCompleted = (ev.type === 'reminder_completed' || ev.completed === true);
+      return isReminder && !isCompleted && t >= nowTs;
+    });
+    const firstNonCompletedIdx = firstFutureIdx >= 0
+      ? firstFutureIdx
+      : timeline.findIndex(ev => {
+          const isReminder = String(ev.type || '').startsWith('reminder');
+          const isCompleted = (ev.type === 'reminder_completed' || ev.completed === true);
+          return isReminder && !isCompleted;
+        });
+
+    timeline.forEach((ev, i) => {
+      const t  = new Date(ev.when || ev.createdAt || Date.now());
+      const ts = t.toLocaleString();
+      const who = ev.doctorName ? ` • ${ev.doctorName}` : '';
+
+      // wrapper del pin
+      const pin = document.createElement('div');
+      pin.className = 'tl-pin';
+      pin.style.position = 'relative';
+      pin.style.flex = '1';
+
+      // mostra sempre aperto il primo non-completed
+      if (i === firstNonCompletedIdx && firstNonCompletedIdx !== -1) {
+        pin.classList.add('show');
+      }
+
+      // dot
+      const dot = document.createElement('span');
+      dot.className = 'tl-dot';
+      if (ev.type === 'alert') dot.classList.add('alert');
+      if (ev.severity === 'critical') dot.classList.add('critical');
+      if (ev.type === 'reminder_completed' || ev.completed === true) dot.classList.add('completed');
+
+      pin.appendChild(dot);
+
+      // card
+      // card (tooltip / dettaglio)
+      const card = document.createElement('div');
+      card.className = 'tl-card ' + (flip % 2 === 0 ? 'top' : 'bot');
+
+      const icon = ev.type === 'alert'
+        ? '⚠️'
+        : (ev.type === 'reminder_completed' || ev.completed) ? '✅'
+        : (String(ev.type||'').startsWith('reminder') ? '⏰' : '📩');
+
+      const statusText = (ev.type === 'reminder_completed' || ev.completed)
+        ? 'Completed'
+        : (ev.status === 'read' ? 'Read' : 'Sent');
+
+      card.innerHTML = `
+        <div class="tl-title">${icon} ${escapeHtml(ev.title || 'Event')}</div>
+        <div class="tl-sub">${ts}${who}</div>
+        <div class="tl-meta">${escapeHtml(statusText)}</div>
+      `;
+
+      pin.appendChild(card);
+      rail.appendChild(pin);
+      flip++;
+    });
+
+  } catch (err) {
+    console.error('timeline error', err);
+    rail.innerHTML = `<div class="tl-empty">Network error</div>`;
+  }
+
+  function escapeHtml(s=''){
+    return String(s)
+      .replaceAll('&','&amp;')
+      .replaceAll('<','&lt;')
+      .replaceAll('>','&gt;')
+      .replaceAll('"','&quot;')
+      .replaceAll("'",'&#39;');
+  }
+})();
+</script>
+
+</body>
+</html>
+
+

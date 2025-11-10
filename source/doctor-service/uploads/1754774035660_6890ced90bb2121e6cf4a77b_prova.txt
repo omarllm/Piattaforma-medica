@@ -1,0 +1,13 @@
+Patient Report (Test File)
+==========================
+
+Patient ID: TEST123
+Doctor: Dr. Curami
+Date: 2025-08-09
+
+Analysis:
+- This is a fake report for testing purposes.
+- No real medical data inside.
+- You can delete this after testing.
+
+Status: OK

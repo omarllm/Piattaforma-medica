@@ -1,0 +1,41 @@
+# SYSTEM DESCRIPTION:
+
+We’re building a distributed platform where each patient has a secure, centralized profile aggregating all their lab results and medical interactions across specialties. Docker-based microservices will manage authentication, profile data, and analysis of tests. Doctors—from family practitioners to specialists—can access a patient’s complete history (dates, values, notes) via a REST API. A dedicated scheduling microservice tracks test dates and automatically sends reminders when new work is due. The system ensures data privacy, seamless collaboration among care teams, and timely alerts so that clinicians and patients can stay proactive about long-term health maintenance.
+# USER STORIES:
+
+1) As a patient, I want to register.  
+2) As a patient, I want to login.  
+3) As a patient, I want the site to remember my password.  
+4) As a patient, I want to logout.  
+5) As a doctor, I want to register.  
+6) As a doctor, I want to login.  
+7) As a doctor, I want the site to remember my password.  
+8) As a doctor, I want to logout.
+9) As a doctor, I want to add patients to my list of patients.
+10) As a doctor, I want to remove patients to my list of patients.
+11) As a doctor, I want to search patients. 
+12) As a doctor, I want to see the entire medical profile of my patients.			
+13) As a doctor, I want to upload the analysis reports of my patients.
+14) As a doctor, I want to delete my reports.		
+15) As a doctor, I want to share the analysis reports with the patients, with explanation.
+16) As a doctor, I want to filter my reports by sector.			
+17) As a patient, I want to visualize the analysis reports shared by the doctor. 			
+18) As a doctor, I want to have contact of patients along with reports.			
+19) As a patient, I want to be notified by the doctor if he sees bad things in reports.
+20) As a doctor, I want to send messages to my patients through a chat in case of further explanation.
+21) As a patient, I want to send messages to my doctors through a chat in case of explanation, after the doctor has contacted me.
+22) As a doctor, I want to contact other doctors of my patients via email.		
+23) As a doctor, I want to have contact of other doctors of my patients for a further comparison.
+24) As a doctor, I want to send messages to other doctors of my patients through a chat. 		
+25) As a doctor, I want to access analysis reports of other sectors.
+26) As a patient, I want to be notified when it's time to get new analysis.			
+27)	As a doctor, I want to set the reminder cadence per test type.
+28) As a doctor, I want to edit the reminder.			
+29)	As a patient, I want to see a timeline with upcoming reminders and notification history.			
+30)	As a patient, I want to manage my contact info & notification preferences from profile.			
+31)	As a patient, I want to export my reports as PDF.
+32) As a doctor, I want to remove a reminder.
+33) As a patient, I want to be able to open the report file.
+34) As a patient, I want to reply to the report once received.	
+
+ 

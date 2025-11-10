@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Search Patients – Med_Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <div class="navbar">
+    <button onclick="window.location.href='dashboard-doctor.html'">Home</button>
+    <button>Link</button>
+    <button>Link</button>
+    <button>Link</button>
+    <button>Link</button>
+    <button>About</button>
+    <span class="user" id="navUser">Hi, Dr. Username</span>
+    <button onclick="logout()">Log out</button>
+  </div>
+
+  <div class="main">
+    <h1>SEARCH PATIENTS</h1>
+    <h2 id="welcomeName">Dr. Username</h2>
+
+    <!-- Search bar -->
+    <div style="max-width:500px; margin:20px auto;">
+      <input
+        type="text"
+        id="searchBar"
+        placeholder="Search patients…"
+        style="width:100%; padding:10px; font-size:1rem; border:1px solid #ccc; border-radius:4px;"
+      >
+    </div>
+
+    <!-- Patient list -->
+    <ul id="patientList" style="list-style:none; padding:0; max-width:500px; margin:0 auto;">
+      <!-- Populated by searchpatients.js -->
+    </ul>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+
+    // Determina il tipo di pagina (solo inizio del nome del file)
+    const page = window.location.pathname.split('/').pop().split('.')[0]; 
+    // 'dashboard-doctor' o 'searchpatients' o 'login' ecc.
+
+    if (!token || !role) {
+      // non loggato
+      alert("Please log in.");
+      window.location.href = "login.html";
+    } else if (page.startsWith('dashboard-doctor') || page.startsWith('searchpatients')) {
+      // pagine riservate ai dottori
+      if (role !== 'doctor') {
+        alert("Unauthorized: Doctors only");
+        window.location.href = "login.html";
+      }
+    } else if (page.startsWith('patient')) {
+      // pagine riservate ai pazienti
+      if (role !== 'patient') {
+        alert("Unauthorized: Patients only");
+        window.location.href = "login.html";
+      }
+    }
+    // altrimenti, per pagine pubbliche (home, about...) non serve controllo
+
+
+    function logout() {
+      localStorage.clear();
+      Swal.fire({
+        icon: 'info',
+        title: 'Logged out',
+        text: 'You have been logged out successfully!',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        window.location.href = 'login.html';
+      });
+    }
+
+    async function loadUser() {
+      const res = await fetch("http://localhost:4000/me", {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const displayName = `${data.role === "doctor" ? "Dr. " : ""}${data.username}`;
+        document.getElementById("navUser").innerText   = `Hi, ${displayName}`;
+        document.getElementById("welcomeName").innerText = displayName;
+      } else {
+        document.getElementById("navUser").innerText = "Hi, Guest";
+      }
+    }
+
+    loadUser();
+  </script>
+  <script src="searchpatients.js"></script>
+</body>
+</html>

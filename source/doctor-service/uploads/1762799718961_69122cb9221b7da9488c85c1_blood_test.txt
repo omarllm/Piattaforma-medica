@@ -1,0 +1,50 @@
+BLOOD TEST - Dati Fittizi
+Paziente: Adulto - maschio - 32 anni
+Digiuno: 12 ore
+
+EMOCROMO COMPLETO (CBC)
+RBC (Globuli rossi): 5.1 x10^6/µL (Range 4.5 - 5.9)
+Emoglobina (Hb): 15.1 g/dL (Range 13.5 - 17.5)
+Ematocrito (Hct): 45.2 % (Range 40 - 52)
+MCV: 88.8 fL (Range 80 - 96)
+MCH: 29.6 pg (Range 27 - 33)
+MCHC: 33.4 g/dL (Range 32 - 36)
+RDW: 12.8 % (Range 11.5 - 14.5)
+WBC (Globuli bianchi): 6.5 x10^3/µL (Range 4 - 10)
+Neutrofili: 55 % (Range 40 - 75)
+Linfociti: 34 % (Range 20 - 45)
+Monociti: 7 % (Range 2 - 10)
+Eosinofili: 3 % (Range 0 - 6)
+Basofili: 1 % (Range 0 - 2)
+Piastrine: 240 x10^3/µL (Range 150 - 400)
+
+CHIMICA CLINICA / METABOLISMO (CMP)
+Glucosio: 89 mg/dL (Range 70 - 100)
+Sodio: 140 mmol/L (Range 135 - 145)
+Potassio: 4.2 mmol/L (Range 3.5 - 5.1)
+Cloro: 103 mmol/L (Range 98 - 107)
+CO2 (bicarbonato): 24 mmol/L (Range 22 - 29)
+Urea (BUN): 32 mg/dL (Range 20 - 50)
+Creatinina: 0.98 mg/dL (Range 0.7 - 1.2)
+eGFR: >90 mL/min (Range >90)
+Bilirubina totale: 0.8 mg/dL (Range 0.2 - 1.2)
+AST (GOT): 22 U/L (Range <40)
+ALT (GPT): 24 U/L (Range <41)
+GGT: 20 U/L (Range <55)
+Fosfatasi alcalina: 69 U/L (Range 40 - 130)
+Proteine totali: 7.1 g/dL (Range 6.0 - 8.3)
+Albumina: 4.4 g/dL (Range 3.5 - 5.2)
+Calcio: 9.6 mg/dL (Range 8.5 - 10.5)
+
+COAGULAZIONE
+PT: 11.8 s (Range 11 - 14)
+INR: 1.0 (Range 0.8 - 1.2)
+aPTT: 31 s (Range 26 - 38)
+
+ASSETTO LIPIDICO
+Colesterolo totale: 172 mg/dL (Range <200)
+HDL: 56 mg/dL (Range >40)
+LDL calcolato: 102 mg/dL (Range <130)
+Trigliceridi: 86 mg/dL (Range <150)
+
+CONCLUSIONE: valori nella norma, nessuna alterazione significativa.
